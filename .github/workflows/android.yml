@@ -1,0 +1,45 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ nmai ]
+  pull_request:
+    branches: [ nmai ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+        cache: gradle
+- name: Psalm – Static Analysis for PHP
+  # You may pin to the exact commit or the version.
+  # uses: psalm/psalm-github-actions@2e545d38ff4387b370449e2673088cc8dc40cf1d
+  uses: psalm/psalm-github-actions@1.1.2
+  with:
+    # Whether or not to use Psalm’s security analysis
+    security_analysis: # optional
+    # File for Psalm’s output
+    report_file: # optional, default is 
+    # Whether or not Composer installs dev packages
+    composer_require_dev: # optional
+    # Whether or not the --ignore-platform-reqs flag is passed to Composer
+    composer_ignore_platform_reqs: # optional
+    - name: Codefresh pipeline runner
+  # You may pin to the exact commit or the version.
+  # uses: codefresh-io/codefresh-pipeline-runner@c563a2bb98a7b8522192aaabf79ee9504141f8dc
+  uses: codefresh-io/codefresh-pipeline-runner@v7
+  with:
+    # codefresh cli build variables, see https://codefresh-io.github.io/cli/pipelines/run-pipeline/#setting-variables-through-the-command for more information.
+    args: # optional
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
